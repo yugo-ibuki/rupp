@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App</title>
+    <script>
+        async function fetchTodos() {
+            const response = await fetch('/todos');
+            const todos = await response.json();
+            const todoList = document.getElementById('todo-list');
+            todoList.innerHTML = '';
+            todos.forEach(todo => {
+                const li = document.createElement('li');
+                li.textContent = `${todo.id}: ${todo.title} (Completed: ${todo.completed})`;
+                todoList.appendChild(li);
+            });
+        }
+
+        async function createTodo() {
+            const title = document.getElementById('todo-title').value;
+            const newTodo = { id: Date.now(), title, completed: false };
+            const response = await fetch('/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newTodo),
+            });
+            if (response.status === 201) {
+                fetchTodos();
+            } else {
+                console.error('Failed to create a new todo.');
+            }
+        }
+    </script>
+</head>
+<body>
+<h1>Todo App</h1>
+<input type="text" id="todo-title" placeholder="Enter a new todo" />
+<button onclick="createTodo()">Add Todo</button>
+<ul id="todo-list"></ul>
+<script>
+    fetchTodos();
+</script>
+</body>
+</html>

@@ -6,3 +6,6 @@ Rustでwebアプリケーションを作成してみる。
 // root
 cargo run
 ```
+
+1. `http://localhost:3030/static/index.html` にアクセス。
+2. TODOを作成する。
